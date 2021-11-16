@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { auth } from "../firebaseConfig";
 
 export default function ArticleEntry({ addArticle }) {
   const [title, setTitle] = useState("");
@@ -11,7 +12,9 @@ export default function ArticleEntry({ addArticle }) {
     if (!title.trim() || !body.trim()) {
       setError("Both the title and body must be supplied");
     } else {
-      addArticle({ title, body });
+      addArticle({ title, body }).catch(() => {
+        setError("article creation failed");
+      });
     }
   }
 
@@ -27,7 +30,9 @@ export default function ArticleEntry({ addArticle }) {
           value={body}
           onChange={(e) => setBody(e.target.value)}
         ></textarea>
-        <button type="submit">Create</button>
+        <button className="buttons" type="submit">
+          Create
+        </button>
       </form>
     </div>
   );
